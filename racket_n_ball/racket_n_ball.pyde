@@ -2,9 +2,11 @@ ballX = 0
 ballY = 0
 
 ballSpeed = 0.2
+ballSpeedX = 0
+ballSpeedY = 0
 ballAngle = PI/5
 
-ballRadius = 20
+ballRadius = 5
 ballAngleMax = PI/1.9
 
 racketWidth = 100
@@ -46,6 +48,7 @@ def draw():
     
     drawRacket()
     drawBall()
+    drawBricks()
     
     
     
@@ -61,16 +64,16 @@ def drawRacket():
     rect(racketX, racketY, racketWidth, racketHeight)
     
 def drawBall():
-    global ballX, ballY, ballRadius, ballAngle, ballSpeed
+    global ballX, ballY, ballRadius, ballAngle, ballSpeed, ballSpeedX, ballSpeedY
     global racketX, racketY, racketWidth, racketHeight
     global deltaTime
     global ballAngleMax
     
     #idem a ce qu'il y a au dessus
-    speedX = cos(ballAngle) * ballSpeed * deltaTime
-    speedY = sin(ballAngle) * ballSpeed * deltaTime
-    ballX += speedX
-    ballY -= speedY
+    ballSpeedX = cos(ballAngle) * ballSpeed * deltaTime
+    ballSpeedY = sin(ballAngle) * ballSpeed * deltaTime
+    ballX += ballSpeedX
+    ballY -= ballSpeedY
     
     #haut et bas   
     if(ballY-ballRadius < 0):
@@ -88,7 +91,7 @@ def drawBall():
         ballAngle = PI - ballAngle
         ballX = ballRadius
     
-    if(racketY < ballY+ballRadius < racketY+racketHeight and speedY < 0):
+    if(racketY < ballY+ballRadius < racketY+racketHeight and ballSpeedY < 0):
         if(racketX < ballX < racketX + racketWidth):
             ratio = (ballX - racketX - racketWidth/2) / (racketWidth/2)
             ballAngle = PI/2 - ratio * ballAngleMax
@@ -98,7 +101,17 @@ def drawBall():
     #draw circle
     circle(ballX, ballY, 2*ballRadius);
     
- 
+def drawBricks():
+    
+    global ballX, ballY, ballRadius, ballSpeedX, ballSpeedY, ballAngle
+    
+    bX = 150
+    bY = 50
+    bW = 150
+    bH = 100
+    
+    rect(bX, bY, bW, bH)
+    print("coucou")
     
        
           
