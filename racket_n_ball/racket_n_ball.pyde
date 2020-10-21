@@ -3,10 +3,11 @@ ballY = 0
 ballSpeedX = 0.3
 ballSpeedY = 0.1
 
-ballSpeed = 0.1
+ballSpeed = 0.2
 ballAngle = PI/5
 
-ballRadius = 5
+ballRadius = 20
+ballAngleMax = PI/1.9
 
 racketWidth = 100
 racketHeight = 10
@@ -65,6 +66,7 @@ def drawBall():
     global ballX, ballY, ballSpeedX, ballSpeedY, ballRadius, ballAngle, ballSpeed
     global racketX, racketY, racketWidth, racketHeight
     global deltaTime
+    global ballAngleMax
     
     #idem a ce qu'il y a au dessus
     ballX += cos(ballAngle) * ballSpeed * deltaTime
@@ -88,7 +90,8 @@ def drawBall():
     
     if(racketY < ballY+ballRadius < racketY+racketHeight and ballSpeedY > 0):
         if(racketX < ballX < racketX + racketWidth):
-            ballSpeedY *= -1
+            ratio = (ballX - racketX - racketWidth/2) / (racketWidth/2)
+            ballAngle = PI/2 - ratio * ballAngleMax
             ballY = racketY-ballRadius
     
     
