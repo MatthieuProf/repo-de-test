@@ -48,8 +48,9 @@ def draw():
     
     drawRacket()
     drawBall()
-    drawBricks()
     
+    for i in range(0, 8):
+        drawBricks(i*50, 50, 50, 20)
     
     
 def drawRacket():
@@ -101,17 +102,29 @@ def drawBall():
     #draw circle
     circle(ballX, ballY, 2*ballRadius);
     
-def drawBricks():
+    
+#une fonction peut prendre des paramètres    
+def drawBricks(bX, bY, bW, bH):
     
     global ballX, ballY, ballRadius, ballSpeedX, ballSpeedY, ballAngle
     
-    bX = 150
-    bY = 50
-    bW = 150
-    bH = 100
-    
+    if(bX < ballX < bX+bW):
+        if(bY < ballY+ballRadius < bY+bH and ballSpeedY < 0):
+            ballAngle = -ballAngle
+            ballY = bY-ballRadius
+        elif(bY < ballY-ballRadius < bY+bH and ballSpeedY > 0):
+            ballAngle = -ballAngle
+            ballY = bY+bH+ballRadius
+        
+    elif(bY < ballY < bY+bH):
+        if(bX < ballX+ballRadius < bX+bW and ballSpeedX > 0):
+            ballAngle = PI - ballAngle
+            ballX = bX - ballRadius
+        elif(bX < ballX-ballRadius < bX+bW and ballSpeedX < 0):
+            ballAngle = PI - ballAngle
+            ballX = bX + bW + ballRadius
+        
     rect(bX, bY, bW, bH)
-    print("coucou")
     
        
           
