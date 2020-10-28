@@ -47,6 +47,17 @@ def foo():
   global mavar
 ```
 
+### Tableau
+Un tableau est une variable qui peut contenir plusieurs valeurs. Ces valeurs seront indéxées dans le tableau.
+
+```
+montab = [10, 1, 8, 7]
+```
+
+Par exemple ici la longueur du tableau que l'on peut obtenir en faisant ```len(montab)``` est égal à 4
+
+La valeur du tableau à l'index 0 est 10. On l'obtient en faisant ```montab[0]```
+
 ### Condition
 L'utilisation des conditions permet d'exécuter une serie d'instruction uniquement si la condition est respectée. On utilise la syntaxe suivante.
 ```
