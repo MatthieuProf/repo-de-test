@@ -1,5 +1,7 @@
 ballX = 0
 ballY = 0
+lastBallX = 0
+lastBallY = 0
 
 ballSpeed = 0.2
 ballSpeedX = 0
@@ -17,6 +19,8 @@ racketY = 0
 lastFrameTime = 0
 deltaTime = 0
 
+bricks = [1, 1, 1, 1, 1, 1, 1, 1]
+
 #ici on definit la fonction setup qui sera exécuté comme point d'entré dans mon code
 def setup():
     #on dit qu'on va faire référence à la variable global
@@ -24,6 +28,10 @@ def setup():
     global lastFrameTime
     #on appel la fonction print pour écrire dans la console
     print("Hello World")
+    #affiche le tableau bricks dans la console
+    print(bricks)
+    #affiche la valeur de bricks à l'index 0 
+    print(bricks[0])
     #on definit la taille de la fenêtre
     size(400, 400)
     #vide la fenêtre
@@ -40,6 +48,7 @@ def setup():
     
 def draw():
     global deltaTime, lastFrameTime
+    global bricks
     
     clear()
     
@@ -49,9 +58,11 @@ def draw():
     drawRacket()
     drawBall()
     
-    for i in range(0, 8):
-        drawBricks(i*50, 50, 50, 20)
+    for i in range(len(bricks)):
+        if(bricks[i] > 0):
+            drawBricks(i*50, 50, 50, 20, i)
     
+    #print(bricks)
     
 def drawRacket():
     global racketX, racketY, racketWidth, racketHeight
@@ -65,10 +76,13 @@ def drawRacket():
     rect(racketX, racketY, racketWidth, racketHeight)
     
 def drawBall():
-    global ballX, ballY, ballRadius, ballAngle, ballSpeed, ballSpeedX, ballSpeedY
+    global ballX, ballY, lastBallX, lastBallY, ballRadius, ballAngle, ballSpeed, ballSpeedX, ballSpeedY
     global racketX, racketY, racketWidth, racketHeight
     global deltaTime
     global ballAngleMax
+    
+    lastBallX = ballX
+    lastBallY = ballY
     
     #idem a ce qu'il y a au dessus
     ballSpeedX = cos(ballAngle) * ballSpeed * deltaTime
@@ -104,27 +118,77 @@ def drawBall():
     
     
 #une fonction peut prendre des paramètres    
-def drawBricks(bX, bY, bW, bH):
+def drawBricks(bX, bY, bW, bH, index):
     
     global ballX, ballY, ballRadius, ballSpeedX, ballSpeedY, ballAngle
+    global bricks
     
+    rect(bX, bY, bW, bH)
+    
+    if(bX < ballX < bX+bW and bY < ballY < bY+bH):
+        print("collision")
+        
+        aBall = (lastBallY-ballY) / (lastBallX-ballX)
+        bBall = ballY - (aBall * ballX)
+        
+        yLeft = aBall*bX + bBall
+        yRight = aBall*(bX+bW) + bBall
+        '''
+        xTop = (bY-bBall)/aBall
+        xBottom = ((bY+bH)-bBall)/aBall
+        
+        
+        fill(255, 0, 0)
+        circle(xTop, bY, 10)
+        circle(xBottom, bY+bH, 10)
+        
+        fill(0, 0, 255)
+        circle(bX, yLeft, 10)
+        circle(bX+bW, yRight, 10)
+        '''
+        
+        if(bY < yLeft < bY+bH and lastBallX < bX < ballX):
+            ballAngle = PI - ballAngle
+            ballX = bX - ballRadius
+            bricks[index] = 0
+        elif(bY < yRight < bY+bH and ballX < bX+bW < lastBallX):
+            ballAngle = PI - ballAngle
+            ballX = bX+bW + ballRadius
+            bricks[index] = 0
+        elif(ballSpeedY < 0):
+            ballAngle = -ballAngle
+            ballY = bY-ballRadius
+            bricks[index] = 0
+        else:
+            ballAngle = -ballAngle
+            ballY = bY+bH+ballRadius
+            bricks[index] = 0
+        
+        
+    
+    '''
     if(bX < ballX < bX+bW):
         if(bY < ballY+ballRadius < bY+bH and ballSpeedY < 0):
             ballAngle = -ballAngle
             ballY = bY-ballRadius
+            bricks[index] = 0
         elif(bY < ballY-ballRadius < bY+bH and ballSpeedY > 0):
             ballAngle = -ballAngle
             ballY = bY+bH+ballRadius
+            bricks[index] = 0
         
     elif(bY < ballY < bY+bH):
         if(bX < ballX+ballRadius < bX+bW and ballSpeedX > 0):
             ballAngle = PI - ballAngle
             ballX = bX - ballRadius
+            bricks[index] = 0
         elif(bX < ballX-ballRadius < bX+bW and ballSpeedX < 0):
             ballAngle = PI - ballAngle
             ballX = bX + bW + ballRadius
+            bricks[index] = 0
+    '''
         
-    rect(bX, bY, bW, bH)
+    
     
        
           
